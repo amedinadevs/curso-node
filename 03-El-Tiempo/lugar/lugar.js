@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const getLugarLatLng = async (direccion) => {
+const getLugarLatLng = async direccion => {
   const encodedURL = encodeURI(direccion);
 
   const instance = axios.create({
@@ -10,27 +10,24 @@ const getLugarLatLng = async (direccion) => {
     }
   });
 
- const resp = await instance.get()
+  const resp = await instance.get();
 
+  if (resp.data.Results.length === 0) {
+    throw new Error(`No se han encontrado datos para ${direccion}`);
+  }
 
+  const data = resp.data.Results[0];
+  const nombre = data.name;
+  const lat = data.lat;
+  const lng = data.lon;
 
-    if(resp.data.Results.length === 0){
-        throw new Error (`No se han encontrado datos para ${direccion}`);
-    }
-
-    const data = resp.data.Results[0];
-    const nombre  = data.name;
-    const lat = data.lat;
-    const lng = data.lon;
-
-    return {
-        nombre, 
-        lat,
-        lng
-    }
+  return {
+    nombre,
+    lat,
+    lng
+  };
 };
 
-
 module.exports = {
-    getLugarLatLng
-}
+  getLugarLatLng
+};
