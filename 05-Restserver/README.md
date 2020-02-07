@@ -10,6 +10,15 @@ $ node server
 cd server
 $ nodemon server
 
+# Dependencias extra
+-- VALIDACION CAMPOS UNICOS DEL SCHEMA
+$ npm install mongoose-unique-validator
+
+-- ENCRIPTACION CONTRASEÑAS
+$ npm install bcrypt --save
+
+-- EXTENSION JS
+$ npm i underscore --save
 
 # Subir a Heroku
 $ git push heroku master
