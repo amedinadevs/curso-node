@@ -10,7 +10,7 @@ app.get('/usuario', function (req, res) {
     let desde = req.query.desde || 0;
     let limite = req.query.limite || 5;
 
-    Usuario.find({})
+    Usuario.find({estado: true}, 'nombre email role estado google img')
         .skip(Number(desde))
         .limit(Number(limite))
         .exec((err, usuarios) => {
@@ -21,10 +21,17 @@ app.get('/usuario', function (req, res) {
                 });
             }
 
-            res.json({
-                ok: true,
-                usuarios
+            Usuario.count({estado: true}, (err, cuenta) => {
+
+                res.json({
+                    ok: true,
+                    usuarios,
+                    cuantos: cuenta
+                });
+
             });
+
+            
         })
 })
 
@@ -61,6 +68,7 @@ app.put('/usuario/:id', function (req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']); // los campos que se tienen que devolver
 
+    //https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate
     Usuario.findByIdAndUpdate(id, body, {new:true, runValidators:true}, (err, usuarioDB) => {
 
         if (err) {
@@ -77,8 +85,68 @@ app.put('/usuario/:id', function (req, res) {
     });
 })
 
-app.delete('/usuario', function (req, res) {
-    res.json('delete usuario')
+// borrado físico
+app.delete('/usuario/:id', function (req, res) {
+    let id = req.params.id;
+
+    Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!usuarioBorrado) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "Usuario no encontrado"
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            usuario: usuarioBorrado
+        })
+    })
+})
+
+
+// update (id parametro, req put)
+app.delete('/usuario/remove/:id', function (req, res) {
+    let id = req.params.id;
+    // NOTA: tambien se puede hacer con findByIdAndUpdate pasando en vez de body un objeto {estado: false}
+
+    //https://mongoosejs.com/docs/api.html#model_Model.findById
+    Usuario.findById(id, (err, usuarioDB) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+        if(!usuarioDB){
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "Usuario no encontrado"
+                }
+            });
+        }
+
+        usuarioDB.estado = false;
+        usuarioDB.save();
+
+        res.json({
+            ok: true,
+            usuario: usuarioDB
+        })
+    });
 })
 
 module.exports = app;

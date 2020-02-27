@@ -22,3 +22,8 @@ $ npm i underscore --save
 
 # Subir a Heroku
 $ git push heroku master
+
+# conexión Atlas
+amedinadevs
+IgrSnyOR0efNh0qB
+mongodb+srv://amedinadevs:IgrSnyOR0efNh0qB@cluster0-i7pp7.mongodb.net/cafe

@@ -15,9 +15,10 @@ app.use(bodyParser.json())
 app.use(require('./routes/usuario'));
 
 async function conectarBD(){
-    await mongoose.connect('mongodb://localhost:27017/cafe', {
+    await mongoose.connect(process.env.URLDB, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
     }).catch(error => console.log(error));
 
     console.log('conexion establecida con BD');
