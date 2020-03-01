@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario');
 const app = express();
-//require('../config/config');
 
 app.post('/login',(req,res)=>{
 
