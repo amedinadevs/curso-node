@@ -5,7 +5,7 @@ process.env.PORT = process.env.PORT || 3000;
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // TOKEN
-process.env.TOKEN_CADUCIDAD = 60 * 60 * 24 * 30; //1 mes
+process.env.TOKEN_CADUCIDAD = '48h'; 
 process.env.TOKEN_SEED = process.env.TOKEN_SEED || 'secret-token';
 
 // CONEXION BD

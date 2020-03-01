@@ -125,7 +125,7 @@ app.delete('/usuario/remove/:id',[verificarToken, verificarAdminRole], (req, res
     Usuario.findById(id, (err, usuarioDB) => {
 
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });
